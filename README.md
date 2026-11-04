@@ -1,2 +1,2 @@
 # Claude
-Pratincing the Calude basic
+Practicing the Claude basics
