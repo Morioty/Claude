@@ -1,0 +1,419 @@
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --text: #1f2430;
+  --muted: #6b7280;
+  --line: #e3e6eb;
+  --accent: #4f46e5;
+
+  --work: #2563eb;
+  --work-bg: #dbeafe;
+  --work-fg: #1e3a8a;
+  --personal: #16a34a;
+  --personal-bg: #dcfce7;
+  --personal-fg: #14532d;
+  --study: #d97706;
+  --study-bg: #fef3c7;
+  --study-fg: #78350f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161b;
+    --card: #1e2128;
+    --text: #e8eaf0;
+    --muted: #9aa1b0;
+    --line: #2f3440;
+    --accent: #818cf8;
+
+    --work: #60a5fa;
+    --work-bg: #1e3a5f;
+    --work-fg: #bfdbfe;
+    --personal: #4ade80;
+    --personal-bg: #14392a;
+    --personal-fg: #bbf7d0;
+    --study: #fbbf24;
+    --study-bg: #4a3411;
+    --study-fg: #fde68a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.app-header h1 { margin: 0; font-size: 1.5rem; }
+.app-header time { color: var(--muted); font-size: .9rem; }
+
+.warning {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: .9rem;
+}
+
+/* 대시보드 */
+.dashboard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.summary { margin: 0 0 10px; font-size: 1.15rem; font-weight: 600; }
+
+.bar {
+  height: 14px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+
+.cat-stats {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.cat-stat {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr 3.5rem;
+  align-items: center;
+  gap: 10px;
+  font-size: .9rem;
+}
+.cat-stat .mini-bar {
+  height: 8px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.cat-stat .mini-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+.cat-stat .count { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* 카테고리 색상 */
+.cat-work { --c: var(--work); --c-bg: var(--work-bg); --c-fg: var(--work-fg); }
+.cat-personal { --c: var(--personal); --c-bg: var(--personal-bg); --c-fg: var(--personal-fg); }
+.cat-study { --c: var(--study); --c-bg: var(--study-bg); --c-fg: var(--study-fg); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--c-bg);
+  color: var(--c-fg);
+  font-size: .8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 0;
+  font-family: inherit;
+}
+.badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+}
+button.badge { cursor: pointer; }
+.mini-fill { background: var(--c); }
+
+/* 입력 */
+.add-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.add-form input[type="text"] { flex: 1; min-width: 0; }
+
+input[type="text"], input[type="date"], select {
+  font: inherit;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+}
+button {
+  font: inherit;
+  padding: 9px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+.add-form button[type="submit"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 필터 */
+.filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.filters button { padding: 6px 14px; border-radius: 999px; font-size: .9rem; }
+.filters button[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+/* 목록 */
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--c);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.item input[type="checkbox"] { width: 20px; height: 20px; flex: none; accent-color: var(--c); }
+.item .text { flex: 1; min-width: 0; overflow-wrap: anywhere; cursor: text; }
+.item.done .text { text-decoration: line-through; color: var(--muted); }
+.item.done { opacity: .75; }
+.item .due {
+  flex: none;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  border: 0;
+  background: transparent;
+  padding: 1px 0;
+  cursor: pointer;
+}
+.item .due.today { color: var(--study-fg); background: var(--study-bg); padding: 1px 8px; border-radius: 6px; font-weight: 600; }
+.item .due.overdue { color: #991b1b; background: #fee2e2; padding: 1px 8px; border-radius: 6px; font-weight: 600; }
+@media (prefers-color-scheme: dark) {
+  .item .due.overdue { color: #fecaca; background: #5b1f1f; }
+}
+
+.item .actions { display: flex; gap: 6px; flex: none; }
+.item .actions button { padding: 4px 10px; font-size: .85rem; }
+
+.item.editing { flex-wrap: wrap; }
+.item.editing .edit-text { flex: 1; min-width: 8rem; }
+
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  background: var(--card);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  font-size: .9rem;
+}
+.date-filter button { padding: 3px 10px; font-size: .85rem; margin-left: auto; }
+
+/* 달력 */
+.calendar {
+  margin-top: 28px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+}
+.cal-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.cal-head h2 { flex: 1; margin: 0; font-size: 1.05rem; text-align: center; }
+.cal-head button { padding: 4px 12px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal-wd { text-align: center; font-size: .8rem; color: var(--muted); padding: 4px 0; }
+.cal-wd:first-child { color: #dc2626; }
+.cal-day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
+  min-height: 46px;
+  padding: 5px 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: .9rem;
+}
+.cal-day:hover { background: var(--bg); }
+.cal-day.other { color: var(--muted); opacity: .55; }
+.cal-day.today { border-color: var(--accent); font-weight: 700; }
+.cal-day.selected { background: var(--accent); border-color: var(--accent); color: #fff; opacity: 1; }
+.cal-day.overdue .num { color: #dc2626; font-weight: 700; }
+.cal-day.selected.overdue .num { color: #fff; }
+.dots { display: flex; gap: 3px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+.dot.dim { opacity: .3; }
+.cal-day.selected .dot { box-shadow: 0 0 0 1.5px #fff; }
+.cal-help { margin: 10px 0 0; font-size: .8rem; color: var(--muted); }
+
+.empty { text-align: center; color: var(--muted); padding: 32px 0; }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .25);
+  max-width: calc(100% - 32px);
+}
+.toast button {
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+  padding: 3px 10px;
+}
+
+@media (max-width: 480px) {
+  .add-form { flex-wrap: wrap; }
+  .add-form input[type="text"] { flex-basis: 100%; }
+  .add-form select, .add-form input[type="date"] { flex: 1; }
+  .item { flex-wrap: wrap; }
+  .item .actions { margin-left: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill, .mini-fill { transition: none; }
+}
+
+/* 데스크톱 전체 화면용 레이아웃: style.css 위에 덮어쓴다 */
+
+.layout { display: block; }
+.col-side { margin-top: 28px; }
+
+/* 달력 칸 안의 할 일 칩: 좁은 화면에서는 숨기고 점만 보인다 */
+.chips { display: none; }
+
+@media (min-width: 900px) {
+  .app {
+    max-width: 1400px;
+    padding: 32px 40px 80px;
+  }
+  .app-header { margin-bottom: 24px; }
+  .app-header h1 { font-size: 2rem; }
+  .app-header time { font-size: 1rem; }
+
+  /* 대시보드: 왼쪽 요약+전체 바, 오른쪽 카테고리별 진행률 */
+  .dashboard {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    column-gap: 48px;
+    align-items: center;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+  .dashboard .summary { grid-column: 1; font-size: 1.6rem; }
+  .dashboard .bar { grid-column: 1; height: 18px; }
+  .dashboard .cat-stats { grid-column: 2; grid-row: 1 / span 2; margin: 0; }
+  .cat-stat { font-size: 1rem; }
+
+  /* 본문: 왼쪽 목록, 오른쪽 달력 */
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(340px, 1fr) minmax(0, 1.5fr);
+    gap: 32px;
+    align-items: start;
+  }
+  .col-side { margin-top: 0; }
+  .calendar { margin-top: 0; padding: 24px; }
+  .cal-head { margin-bottom: 16px; }
+  .cal-head h2 { font-size: 1.4rem; }
+  .cal-head button { font-size: 1.1rem; padding: 6px 16px; }
+  .cal-grid { gap: 6px; }
+  .cal-wd { font-size: .95rem; padding: 6px 0; }
+
+  .cal-day {
+    min-height: 118px;
+    align-items: stretch;
+    padding: 6px;
+    gap: 5px;
+    font-size: 1rem;
+    border-color: var(--line);
+    text-align: left;
+  }
+  .cal-day .num { align-self: flex-start; padding: 0 4px; }
+  .cal-day.today { border-width: 2px; }
+  .cal-day .dots { display: none; }
+  .cal-day .chips { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .chip {
+    display: block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border-left: 3px solid var(--c);
+    background: var(--c-bg);
+    color: var(--c-fg);
+    font-size: .78rem;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .chip.done { text-decoration: line-through; opacity: .55; }
+  .chip-more { font-size: .75rem; color: var(--muted); padding-left: 4px; }
+  .cal-day.selected .chip-more { color: #fff; }
+  .cal-help { font-size: .85rem; }
+
+  .add-form { margin-bottom: 16px; }
+  .add-form input[type="text"] { flex: 1 1 auto; }
+  input[type="text"], input[type="date"], select, button { font-size: 1rem; }
+  .filters { margin-bottom: 16px; }
+  .list { gap: 10px; }
+  .item { padding: 14px 18px; }
+  .item .text { font-size: 1.05rem; }
+  .item .actions button { font-size: .9rem; }
+}
+
+@media (min-width: 1600px) {
+  .app { max-width: 1680px; }
+  .layout { grid-template-columns: minmax(380px, 1fr) minmax(0, 1.6fr); }
+  .cal-day { min-height: 132px; }
+  .chip { font-size: .85rem; }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>오늘의 할 일</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1>오늘의 할 일</h1>
+      <time id="today"></time>
+    </header>
+
+    <div id="storage-warning" class="warning" role="alert" hidden>
+      저장이 되지 않습니다. 이 브라우저에서는 새로고침하면 데이터가 사라집니다.
+    </div>
+
+    <section class="dashboard" aria-label="진행률">
+      <p id="summary" class="summary" aria-live="polite"></p>
+      <div id="bar" class="bar" role="progressbar" aria-label="전체 진행률"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="bar-fill" class="bar-fill"></div>
+      </div>
+      <ul id="cat-stats" class="cat-stats"></ul>
+    </section>
+
+    <div class="layout">
+      <div class="col-main">
+        <form id="add-form" class="add-form" autocomplete="off">
+          <input id="add-text" type="text" maxlength="100" placeholder="할 일을 입력하세요" aria-label="할 일">
+          <select id="add-category" aria-label="카테고리">
+            <option value="work">업무</option>
+            <option value="personal">개인</option>
+            <option value="study">공부</option>
+          </select>
+          <input id="add-due" type="date" aria-label="마감일 (선택)" title="마감일 (선택)">
+          <button type="submit">추가</button>
+        </form>
+
+        <nav id="filters" class="filters" aria-label="카테고리 필터"></nav>
+
+        <p id="date-filter" class="date-filter" hidden>
+          <span id="date-filter-text"></span>
+          <button id="date-filter-clear" type="button">해제</button>
+        </p>
+
+        <ul id="list" class="list"></ul>
+        <p id="empty" class="empty" hidden></p>
+      </div>
+
+      <aside class="col-side">
+        <section class="calendar" aria-label="마감일 달력">
+          <div class="cal-head">
+            <button id="cal-prev" type="button" aria-label="이전 달">‹</button>
+            <h2 id="cal-title"></h2>
+            <button id="cal-next" type="button" aria-label="다음 달">›</button>
+            <button id="cal-today" type="button">오늘</button>
+          </div>
+          <div id="cal-grid" class="cal-grid"></div>
+          <p class="cal-help">날짜를 누르면 그날 마감인 항목만 보이고, 새 할 일의 마감일로 채워집니다.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" hidden>
+    <span id="toast-msg"></span>
+    <button id="toast-undo" type="button">실행 취소</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
