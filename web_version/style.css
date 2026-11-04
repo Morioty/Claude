@@ -157,12 +157,20 @@ button.badge { cursor: pointer; }
 /* 입력 */
 .add-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
 }
-.add-form input[type="text"] { flex: 1; min-width: 0; }
+.add-form #add-text { flex: 1 1 200px; min-width: 0; }
 
-input[type="text"], input[type="date"], select {
+/* 공부량 입력 (추가 폼 / 수정 모드 공통) */
+.study-fields { display: flex; gap: 8px; flex-wrap: wrap; }
+.study-fields[hidden] { display: none; }
+.study-fields input[type="number"] { width: 7.5rem; }
+.study-fields .unit { width: 5rem; }
+.item.editing .study-fields { flex: 1 0 100%; }
+
+input[type="text"], input[type="date"], input[type="number"], select {
   font: inherit;
   padding: 9px 12px;
   border: 1px solid var(--line);
@@ -232,7 +240,28 @@ button {
 .item .actions { display: flex; gap: 6px; flex: none; }
 .item .actions button { padding: 4px 10px; font-size: .85rem; }
 
-.item.editing { flex-wrap: wrap; }
+.item.editing, .item.has-study { flex-wrap: wrap; }
+
+/* 공부 항목: 공부량, 오늘 목표, 기록 */
+.study {
+  flex: 1 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  padding-left: 30px;
+  font-size: .85rem;
+}
+.study .mini-bar { width: 120px; }
+.study-plan { font-weight: 600; }
+.study-plan.achieved { color: var(--personal-fg); }
+.study-plan.late { color: #b91c1c; }
+@media (prefers-color-scheme: dark) {
+  .study-plan.late { color: #fca5a5; }
+}
+.study-record { margin-left: auto; display: flex; gap: 6px; }
+.study-record input[type="number"] { width: 7rem; padding: 4px 8px; font-size: .85rem; }
+.study-record button { padding: 4px 10px; font-size: .85rem; }
 .item.editing .edit-text { flex: 1; min-width: 8rem; }
 
 .date-filter {
@@ -291,8 +320,7 @@ button {
 .empty { text-align: center; color: var(--muted); padding: 32px 0; }
 
 @media (max-width: 480px) {
-  .add-form { flex-wrap: wrap; }
-  .add-form input[type="text"] { flex-basis: 100%; }
+  .add-form #add-text { flex-basis: 100%; }
   .add-form select, .add-form input[type="date"] { flex: 1; }
   .item { flex-wrap: wrap; }
   .item .actions { margin-left: auto; }
@@ -380,8 +408,8 @@ button {
   .cal-help { font-size: .85rem; }
 
   .add-form { margin-bottom: 16px; }
-  .add-form input[type="text"] { flex: 1 1 auto; }
-  input[type="text"], input[type="date"], select, button { font-size: 1rem; }
+  .add-form #add-text { flex: 1 1 240px; }
+  input[type="text"], input[type="date"], input[type="number"], select, button { font-size: 1rem; }
   .filters { margin-bottom: 16px; }
   .list { gap: 10px; }
   .item { padding: 14px 18px; }
@@ -394,4 +422,51 @@ button {
   .layout { grid-template-columns: minmax(380px, 1fr) minmax(0, 1.6fr); }
   .cal-day { min-height: 132px; }
   .chip { font-size: .85rem; }
+}
+
+/* 공부 목표가 마감일까지 이어지는 날: 점선 칩 / 속이 빈 점 */
+.dot.quota { background: transparent; box-shadow: inset 0 0 0 1.5px var(--c); }
+@media (min-width: 900px) {
+  .chip.quota {
+    background: transparent;
+    color: var(--text);
+    border: 1px dashed var(--c);
+    border-left: 3px dashed var(--c);
+  }
+}
+
+/* 공부 추적: 날짜별 목표 대비 실적 */
+.study-record .track-btn { padding: 4px 10px; font-size: .85rem; }
+.track {
+  flex: 1 0 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: .85rem;
+}
+.track-summary { margin: 0 0 8px; font-weight: 600; }
+.track-empty { margin: 0; color: var(--muted); }
+.track-row {
+  display: grid;
+  grid-template-columns: 5.5rem 6rem 6rem minmax(40px, 1fr) 4rem;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-variant-numeric: tabular-nums;
+}
+.track-row.today { font-weight: 700; }
+.track-row .bar-wrap { height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.track-row .bar-wrap > div { height: 100%; background: var(--c); border-radius: 999px; }
+.track-row .status { text-align: right; font-weight: 600; }
+.track-row .status.ok { color: var(--personal-fg); }
+.track-row .status.miss { color: #b91c1c; }
+.track-row .status.wip { color: var(--muted); }
+@media (prefers-color-scheme: dark) {
+  .track-row .status.miss { color: #fca5a5; }
+}
+@media (max-width: 480px) {
+  .track-row { grid-template-columns: 4.5rem 1fr 1fr 3.5rem; }
+  .track-row .bar-wrap { display: none; }
 }

@@ -36,6 +36,17 @@
             <option value="study">공부</option>
           </select>
           <input id="add-due" type="date" aria-label="마감일 (선택)" title="마감일 (선택)">
+          <span id="add-study" class="study-fields" hidden>
+            <input id="add-amount" type="number" min="0" step="any" placeholder="공부량" aria-label="공부량">
+            <input id="add-unit" class="unit" type="text" list="unit-list" maxlength="6" value="쪽" aria-label="단위">
+          </span>
+          <datalist id="unit-list">
+            <option value="쪽"></option>
+            <option value="문제"></option>
+            <option value="강"></option>
+            <option value="챕터"></option>
+            <option value="시간"></option>
+          </datalist>
           <button type="submit">추가</button>
         </form>
 
