@@ -290,28 +290,6 @@ button {
 
 .empty { text-align: center; color: var(--muted); padding: 32px 0; }
 
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--text);
-  color: var(--bg);
-  padding: 10px 16px;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, .25);
-  max-width: calc(100% - 32px);
-}
-.toast button {
-  background: transparent;
-  color: inherit;
-  border-color: currentColor;
-  padding: 3px 10px;
-}
-
 @media (max-width: 480px) {
   .add-form { flex-wrap: wrap; }
   .add-form input[type="text"] { flex-basis: 100%; }

@@ -4,12 +4,10 @@
   const KEY = 'todo-app:v1';
   const BACKUP_KEY = 'todo-app:backup';
   const MAX_LEN = 100;
-  const UNDO_MS = 5000;
   const CATEGORIES = { work: '업무', personal: '개인', study: '공부' };
 
   let state = { version: 1, filter: 'all', todos: [] };
   let editingId = null;
-  let undo = null; // { todo, index, timer }
   let selectedDate = null; // 달력에서 고른 날짜 'YYYY-MM-DD' (저장하지 않음)
   const now0 = new Date();
   let view = { y: now0.getFullYear(), m: now0.getMonth() };
@@ -31,9 +29,6 @@
     filters: $('filters'),
     list: $('list'),
     empty: $('empty'),
-    toast: $('toast'),
-    toastMsg: $('toast-msg'),
-    toastUndo: $('toast-undo'),
     dateFilter: $('date-filter'),
     dateFilterText: $('date-filter-text'),
     dateFilterClear: $('date-filter-clear'),
@@ -142,46 +137,14 @@
   function deleteTodo(id) {
     const index = state.todos.findIndex((x) => x.id === id);
     if (index < 0) return;
-    const [todo] = state.todos.splice(index, 1);
+    state.todos.splice(index, 1);
     if (editingId === id) editingId = null;
-    clearUndo();
-    undo = { todo, index, timer: setTimeout(hideToast, UNDO_MS) };
-    commit();
-    showToast(`"${truncate(todo.text, 20)}" 삭제됨`);
-  }
-
-  function restoreDeleted() {
-    if (!undo) return;
-    const { todo, index } = undo;
-    clearUndo();
-    hideToast();
-    state.todos.splice(Math.min(index, state.todos.length), 0, todo);
     commit();
   }
 
   function setFilter(filter) {
     state.filter = filter;
     commit();
-  }
-
-  // ---------- 토스트 ----------
-
-  function truncate(s, n) {
-    return s.length > n ? s.slice(0, n) + '…' : s;
-  }
-
-  function showToast(msg) {
-    el.toastMsg.textContent = msg;
-    el.toast.hidden = false;
-  }
-
-  function hideToast() {
-    el.toast.hidden = true;
-    if (undo) { clearTimeout(undo.timer); undo = null; }
-  }
-
-  function clearUndo() {
-    if (undo) { clearTimeout(undo.timer); undo = null; }
   }
 
   // ---------- 렌더링 ----------
@@ -543,7 +506,6 @@
     el.text.focus();
   });
 
-  el.toastUndo.addEventListener('click', restoreDeleted);
   el.calPrev.addEventListener('click', () => moveMonth(-1));
   el.calNext.addEventListener('click', () => moveMonth(1));
   el.calToday.addEventListener('click', () => {
